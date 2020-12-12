@@ -6,11 +6,10 @@ from bs4 import BeautifulSoup
 import requests
 from lxml import html
 import os
-from config import secrets
+from config import secrets, URL_MEMBERS_LOCAL_GYM
 
 URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
-URL_MEMBERS = 'https://members.energiefitness.com/kilburn/inthevenue'
 DATA_SUBDIRECTORY = "data"
 
 def login():
@@ -60,18 +59,10 @@ def login():
 
 
 def get_number(session):
-    page = session.get(URL_MEMBERS)
+    page = session.get(URL_MEMBERS_LOCAL_GYM)
     soup = BeautifulSoup(page.content, 'html.parser')
     num = int(soup.find('div', {'class': 'column'}).find('h1').text)
     return num
-
-
-def write_data(num_people, output_file):
-    f = open(output_file, 'a', newline='')
-    w = csv.writer(f)
-    d = datetime.utcnow()
-    w.writerow([d.date(), d.strftime("%A"), d.strftime("%H:%M"), num_people])
-
 
 def track(request):
 
@@ -85,5 +76,3 @@ def track(request):
     result = (date_string, time_string, no_of_members)
     print(result)
     return result
-
-track('b')
