@@ -7,11 +7,10 @@ import requests
 from lxml import html
 from bs4 import BeautifulSoup
 import os
-from config import secrets
+from config import secrets, URL_MEMBERS_LOCAL_GYM
 
 URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
-URL_MEMBERS = 'https://members.energiefitness.com/kilburn/inthevenue'
 DATA_SUBDIRECTORY = "data"
 CHECK_INTERVAL_MINUTES = 5
 
@@ -64,7 +63,7 @@ def login():
 
 
 def get_number(session):
-    page = session.get(URL_MEMBERS)
+    page = session.get(URL_MEMBERS_LOCAL_GYM)
     soup = BeautifulSoup(page.content, 'html.parser')
     num = int(soup.find('div', {'class': 'column'}).find('h1').text)
     return num
