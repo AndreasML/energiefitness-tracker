@@ -1,0 +1,5 @@
+*.bat
+*.csv
+data/
+config.py
+__pycache__
