@@ -83,5 +83,5 @@ def track(request):
 
     GymData = namedtuple('GymData', 'date time members')
 
-    result = GymData(date = date_string, time = time_string, members =no_of_members)
+    result = GymData(date = date_string, time = time_string, members = str(no_of_members))
     return result
