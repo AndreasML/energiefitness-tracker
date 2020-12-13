@@ -13,6 +13,12 @@ URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
 DATA_SUBDIRECTORY = "data"
 
+# Runtime environment variables from GCP
+LOGIN_EMAIL = os.environ.get('LOGIN_EMAIL')
+LOGIN_PASSWORD = os.environ.get('LOGIN_PASSWORD')
+URL_MEMBERS_LOCAL_GYM = os.environ.get('URL_MEMBERS_LOCAL_GYM')
+
+
 def login():
 
     # Persistent login session
