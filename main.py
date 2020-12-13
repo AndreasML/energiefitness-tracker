@@ -9,6 +9,7 @@ import requests
 from lxml import html
 import os
 from collections import namedtuple
+import json
 
 URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
@@ -82,6 +83,6 @@ def track(request):
     time_string = d.strftime("%H:%M")
 
     GymData = namedtuple('GymData', 'date time members')
-
     result = GymData(date = date_string, time = time_string, members = str(no_of_members))
-    return result
+
+    return json.dumps(result._asdict()), , 200, {'ContentType': 'application/json'}
