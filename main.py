@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import requests
 from lxml import html
 import os
+from collections import namedtuple
 
 URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
@@ -80,6 +81,7 @@ def track(request):
     date_string = d.strftime("%A") 
     time_string = d.strftime("%H:%M")
 
-    result = (date_string, time_string, no_of_members)
-    print(result)
+    GymData = namedtuple('GymData', 'date time members')
+
+    result = GymData(date = date_string, time = time_string, members =no_of_members)
     return result
