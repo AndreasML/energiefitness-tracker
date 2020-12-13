@@ -82,7 +82,7 @@ def track(request):
     date_string = d.strftime("%A") 
     time_string = d.strftime("%H:%M")
 
-    GymData = namedtuple('GymData', 'date time members')
-    result = GymData(date = date_string, time = time_string, members = str(no_of_members))
+    GymData = namedtuple('GymData', 'date day time members')
+    result = GymData(date = d.date(), day = d.strftime("%A"), time = time_string, members = no_of_members)
 
     return json.dumps(result._asdict()), 200, {'ContentType': 'application/json'}
