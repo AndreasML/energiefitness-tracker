@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 import requests
 from lxml import html
 import os
-from config import secrets, URL_MEMBERS_LOCAL_GYM
 
 URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
@@ -41,8 +40,8 @@ def login():
     }
 
     payload = {
-        'Email': secrets.email,
-        'Password': secrets.password,
+        'Email': LOGIN_EMAIL,
+        'Password': LOGIN_PASSWORD,
         '__RequestVerificationToken': 'CfDJ8J4QTDSFntBOk5KNSaeuQSth36xn9nTYW_wrhmJV12RbHzsP5sNmyOWHB2EUwO4syLy55Aq0xQe-rKDsxEvBa1DiU02qjPvbEAYgnQIXp3z7RmPcIJzpuqJno48SPszzxSgJuvod_JFeJj5pcHMAmprcZhuOGdOTx_T0z5PwNXJaf-2Jpqxi7lR7m5qXk-EO0A'
     }
 

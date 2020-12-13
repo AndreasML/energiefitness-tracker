@@ -3,3 +3,4 @@
 data/
 config.py
 __pycache__
+tracker.py
