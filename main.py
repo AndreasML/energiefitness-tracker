@@ -85,4 +85,4 @@ def track(request):
     GymData = namedtuple('GymData', 'date time members')
     result = GymData(date = date_string, time = time_string, members = str(no_of_members))
 
-    return json.dumps(result._asdict()), , 200, {'ContentType': 'application/json'}
+    return json.dumps(result._asdict()), 200, {'ContentType': 'application/json'}
