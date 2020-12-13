@@ -1,4 +1,6 @@
-
+"""
+    Named "main.py" for the purpose of Google Cloud Function.
+"""
 import csv
 from datetime import datetime
 from time import sleep
