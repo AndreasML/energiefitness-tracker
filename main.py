@@ -95,7 +95,7 @@ def write_data_to_bq(row):
     assert errors == []
 
 
-def track(request):
+def track(event, context):
 
     login_session = login()
     
@@ -111,5 +111,3 @@ def track(request):
     write_data_to_bq(result)
     
     return json.dumps(result._asdict()), 200, {'ContentType': 'application/json'}
-
-track(0)
