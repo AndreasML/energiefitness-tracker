@@ -10,6 +10,8 @@ from lxml import html
 import os
 from collections import namedtuple
 import json
+from google.cloud import bigquery
+
 
 URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
@@ -19,6 +21,9 @@ DATA_SUBDIRECTORY = "data"
 LOGIN_EMAIL = os.environ.get('LOGIN_EMAIL')
 LOGIN_PASSWORD = os.environ.get('LOGIN_PASSWORD')
 URL_MEMBERS_LOCAL_GYM = os.environ.get('URL_MEMBERS_LOCAL_GYM')
+BQ_DATASET_ID = os.environ.get('BQ_DATASET_ID')
+BQ_TABLE_ID = os.environ.get("BQ_TABLE_ID")
+
 
 
 def login():
@@ -73,16 +78,38 @@ def get_number(session):
     num = int(soup.find('div', {'class': 'column'}).find('h1').text)
     return num
 
+
+def write_data_to_bq(row):
+
+    # Instantiates a client
+    bigquery_client = bigquery.Client()
+
+    # Prepares a reference to the dataset
+    dataset_ref = bigquery_client.dataset(BQ_DATASET_ID)
+
+    table_ref = dataset_ref.table(BQ_TABLE_ID)
+    table = bigquery_client.get_table(table_ref)  # API call
+
+    rows_to_insert = [row]
+    errors = bigquery_client.insert_rows(table, rows_to_insert)  # API request
+    assert errors == []
+
+
 def track(request):
 
     login_session = login()
-
-    no_of_members = get_number(login_session)
+    
     d = datetime.utcnow()
     date_string = d.strftime("%A") 
     time_string = d.strftime("%H:%M")
 
+    no_of_members = get_number(login_session)
+    
     GymData = namedtuple('GymData', 'date day time members')
     result = GymData(date = str(d.date()), day = d.strftime("%A"), time = time_string, members = no_of_members)
+
+    write_data_to_bq(result)
     
     return json.dumps(result._asdict()), 200, {'ContentType': 'application/json'}
+
+track(0)
