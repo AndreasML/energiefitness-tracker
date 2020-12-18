@@ -1,7 +1,7 @@
 *.bat
 *.csv
 data/
-config.py
+local_config.py
 __pycache__
 .vscode/
 tracker.py

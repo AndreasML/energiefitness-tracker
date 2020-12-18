@@ -1,29 +1,22 @@
 """
     Named "main.py" for the purpose of Google Cloud Function.
 """
-import csv
 from datetime import datetime
-from time import sleep
 from bs4 import BeautifulSoup
 import requests
 from lxml import html
 import os
 from collections import namedtuple
 import json
-from google.cloud import bigquery
+from google.cloud import bigquery, secretmanager
+from config import *
 
 
-URL_LOGIN = 'https://members.energiefitness.com/login/'
-URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
-DATA_SUBDIRECTORY = "data"
-
-# Runtime environment variables from GCP
-LOGIN_EMAIL = os.environ.get('LOGIN_EMAIL')
-LOGIN_PASSWORD = os.environ.get('LOGIN_PASSWORD')
-URL_MEMBERS_LOCAL_GYM = os.environ.get('URL_MEMBERS_LOCAL_GYM')
-BQ_DATASET_ID = os.environ.get('BQ_DATASET_ID')
-BQ_TABLE_ID = os.environ.get("BQ_TABLE_ID")
-
+def get_secret(secret):
+    secrets_client = secretmanager.SecretManagerServiceClient()
+    request = {"name": f"projects/{PROJECT_ID}/secrets/{secret}/versions/latest"}
+    response = secrets_client.access_secret_version(request)
+    secret_string = response.payload.data.decode("UTF-8")
 
 
 def login():
@@ -53,9 +46,9 @@ def login():
     }
 
     payload = {
-        'Email': LOGIN_EMAIL,
-        'Password': LOGIN_PASSWORD,
-        '__RequestVerificationToken': 'CfDJ8J4QTDSFntBOk5KNSaeuQSth36xn9nTYW_wrhmJV12RbHzsP5sNmyOWHB2EUwO4syLy55Aq0xQe-rKDsxEvBa1DiU02qjPvbEAYgnQIXp3z7RmPcIJzpuqJno48SPszzxSgJuvod_JFeJj5pcHMAmprcZhuOGdOTx_T0z5PwNXJaf-2Jpqxi7lR7m5qXk-EO0A'
+        'Email': get_secret(SECRET_EMAIL),
+        'Password': get_secret(SECRET_EMAIL),
+        '__RequestVerificationToken': get_secret(SECRET_REQUEST_TOKEN)
     }
 
     # Perform login
