@@ -7,7 +7,7 @@ import requests
 from lxml import html
 from bs4 import BeautifulSoup
 import os
-from config import secrets, URL_MEMBERS_LOCAL_GYM
+from local_config import secrets, URL_MEMBERS_LOCAL_GYM
 
 URL_LOGIN = 'https://members.energiefitness.com/login/'
 URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
@@ -22,8 +22,6 @@ def login():
     # Get login auth token
     result = session.get(URL_LOGIN)
     tree = html.fromstring(result.text)
-    # auth_token = tree.xpath("/html/body/main/form/input/@value")[0]
-    # print(auth_token)
 
     headers = {
         'authority': 'members.energiefitness.com',
@@ -45,7 +43,7 @@ def login():
     payload = {
         'Email': secrets.email,
         'Password': secrets.password,
-        '__RequestVerificationToken': 'CfDJ8J4QTDSFntBOk5KNSaeuQSth36xn9nTYW_wrhmJV12RbHzsP5sNmyOWHB2EUwO4syLy55Aq0xQe-rKDsxEvBa1DiU02qjPvbEAYgnQIXp3z7RmPcIJzpuqJno48SPszzxSgJuvod_JFeJj5pcHMAmprcZhuOGdOTx_T0z5PwNXJaf-2Jpqxi7lR7m5qXk-EO0A'
+        '__RequestVerificationToken': secrets.token
     }
 
     # Perform login
@@ -69,31 +67,21 @@ def get_number(session):
     return num
 
 
-def write_data(num_people, output_file):
+def write_data(scrape_datetime, num_people, output_file):
     f = open(output_file, 'a', newline='')
     w = csv.writer(f)
-    d = datetime.utcnow()
-    w.writerow([d.date(), d.strftime("%A"), d.strftime("%H:%M"), num_people])
+    w.writerow([scrape_datetime.date(), scrape_datetime.strftime("%A"), scrape_datetime.strftime("%H:%M"), num_people])
 
 
-def main(login_session):
+def track(login_session):
+    scrape_datetime = datetime.utcnow()
     no_of_members = get_number(login_session)
     outfile_name = 'members.csv'
     full_outfile_path = os.path.join(os.path.dirname(__file__), DATA_SUBDIRECTORY, outfile_name)
-    write_data(no_of_members, full_outfile_path)
+    write_data(scrape_datetime, no_of_members, full_outfile_path)
     return no_of_members
 
 if __name__ == "__main__":
 
-    watch = False
-    forever = True
-
     login_session = login()
-
-    while forever:
-
-        members = main(login_session)
-        print(f'{members} members at {datetime.utcnow()}')
-        if forever != watch:
-            break
-        sleep(CHECK_INTERVAL_MINUTES)
+    track(login_session)
