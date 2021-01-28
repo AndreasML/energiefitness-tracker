@@ -47,7 +47,7 @@ def login():
 
     payload = {
         'Email': get_secret(SECRET_EMAIL),
-        'Password': get_secret(SECRET_EMAIL),
+        'Password': get_secret(SECRET_PASSWORD),
         '__RequestVerificationToken': get_secret(SECRET_REQUEST_TOKEN)
     }
 
