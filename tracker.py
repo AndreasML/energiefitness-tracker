@@ -14,14 +14,11 @@ URL_LOGIN_API = 'https://members.energiefitness.com/account/login/'
 DATA_SUBDIRECTORY = "data"
 CHECK_INTERVAL_MINUTES = 5
 
-
-
 def get_token(session):
     headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36',
         }
-        
-    r = session.get(URL_LOGIN, headers=headers)#.cookies#[".AspNetCore.Identity.Application"]
+    r = session.get(URL_LOGIN, headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
     token = soup.select('input[name="__RequestVerificationToken"]')[0]['value']
     return token
@@ -70,6 +67,7 @@ def get_number(session):
     page = session.get(URL_MEMBERS_LOCAL_GYM)
     soup = BeautifulSoup(page.content, 'html.parser')
     num = int(soup.find('div', {'class': 'column'}).find('h1').text)
+    print(num)
     return num
 
 
