@@ -23,9 +23,12 @@ def get_token(session):
     headers = {
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36',
         }        
-    r = session.get(URL_LOGIN, headers=headers)#.cookies#[".AspNetCore.Identity.Application"]
+    r = session.get(URL_LOGIN, headers=headers)
     soup = BeautifulSoup(r.text, 'html.parser')
     token = soup.select('input[name="__RequestVerificationToken"]')[0]['value']
+    ## Report successful token discovery
+    print("Initial GET request Successful: ", r.ok)
+    print("Token: ", token)
     return token
 
 
@@ -47,6 +50,11 @@ def login():
         'referer': URL_LOGIN,
         'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
     }
+
+
+    ## Report successful account details request
+    print("Username retrieved ", get_secret(SECRET_EMAIL) is not None)
+    print("Password retrieved ", get_secret(SECRET_PASSWORD) is not None)
 
     payload = {
         'Email': get_secret(SECRET_EMAIL),
