@@ -17,6 +17,7 @@ def get_secret(secret):
     request = {"name": f"projects/{PROJECT_ID}/secrets/{secret}/versions/latest"}
     response = secrets_client.access_secret_version(request)
     secret_string = response.payload.data.decode("UTF-8")
+    return secret_string
 
 
 def get_token(session):
@@ -51,10 +52,6 @@ def login():
         'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
     }
 
-
-    ## Report successful account details request
-    print("Username retrieved ", get_secret(SECRET_EMAIL) is not None)
-    print("Password retrieved ", get_secret(SECRET_PASSWORD) is not None)
 
     payload = {
         'Email': get_secret(SECRET_EMAIL),
