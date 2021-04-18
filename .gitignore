@@ -6,3 +6,4 @@ __pycache__
 *.pptx
 .vscode/
 local_config.py
+*.sql
