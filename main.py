@@ -1,7 +1,8 @@
 """
     Named "main.py" for the purpose of Google Cloud Function.
 """
-from datetime import datetime
+import datetime
+import time
 from bs4 import BeautifulSoup
 import requests
 from lxml import html
@@ -100,9 +101,9 @@ def track(event, context):
 
     login_session = login()
     
-    d = datetime.utcnow()
+    d = datetime.datetime.utcnow()
     date_string = d.strftime("%A") 
-    time_string = d.strftime("%H:%M")
+    time_string = time.strftime("%H:%M")
 
     no_of_members = get_number(login_session)
     
