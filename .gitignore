@@ -6,3 +6,4 @@ __pycache__
 .vscode/
 tracker.py
 *.pptx
+*.sql
